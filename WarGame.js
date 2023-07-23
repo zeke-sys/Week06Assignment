@@ -37,9 +37,8 @@ class Deck {
         const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
         for (let i = 0; i < suits.length; i++) { //iterating trough the different suits, ranks, and values
-            for (let j = 0; i < ranks; j++) {
-                this.cards.push(new Card(ranks[j], suits[i], values[j]));
-
+            for (let j = 0; j < ranks.length; j++) {
+                this.cards.push(new Card(suits[i], ranks[j], values[j]));
             }
         }
     }
@@ -56,10 +55,10 @@ class Deck {
 //Building the player class
 
 class Player {
-    Constructor (name) {
+    Constructor (name, score) {
         this.playerName = name;
         this.playerDeck = [];
-        this.playerScore = 0;
+        this.playerScore = score;
     }
 
     get name() {
@@ -105,23 +104,23 @@ start() {
         switch (input) {
             case '0':
                 exit;
+                break;
             case '1':
                 this.createGame();
                 break;
         }
-        input = prompt('0- exit; 1- play');
+       input = prompt('0- exit; 1- play');
     }
 }
 
 createGame () { //creating two players as instructed
-    this.players[0] = new Player(
-        prompt('Please enter your name. Happy to beat you!')
-    );
-    this.players[1] = new Player('Player 2');
+    this.players[0] = new Player('Player 1', 0);
 
-    console.log(`You're about to go down, ${this.players[0].name}!`);
+    this.players[1] = new Player('Player 2', 0);
 
-    const cards = new Deck ().buildDeck(); //new deck to play the game
+    console.log(`You're about to go down, ${this.players[1].name}!`);
+
+    const cards = new Deck().buildDeck(); //new deck to play the game
 
     this.players[0].deck = [...cards.slice(0,26)]; //Assigning 26 cards to each player
     this.players[1].deck = [...cards.slice(26,52)];
@@ -131,12 +130,12 @@ createGame () { //creating two players as instructed
 
     for (let i = 0; i < this.players[0].deck.length; i++) { //iterating through each player's deck of cards and adding score for who wins per round
         if (this.players[0].deck[i].value > this.players[1].deck[i].value) {
-            this.players(0).score +=1;
+            this.players[0].score +=1;
 
             let winningHand = `${this.players[0].deck[i].rank} of ${this.players[0].deck[i].suit}`;
-            console.log(`${this.players[0].name} won with a ${winningHand}`);
+            console.log(`Player 1 won with a ${winningHand}`);
         } else {
-            this.players[i].score +=1;
+            this.players[1].score +=1;
             let winningHand = `${this.players[1].deck[i].rank} of ${this.players[1].deck[i].suit}`;
             console.log(`Player 2 won with a ${winningHand}`);
         }
@@ -146,14 +145,14 @@ createGame () { //creating two players as instructed
 
 console.log('Game Over!!');
 if (this.players[0].score > this.players[1].score) {
-    console.log(`${this.players[0].name} won WAR with a score of ${this.players[0].score}`);
+    console.log(`${this.players[0].name.toUpperCase()} won WAR with a score of ${this.players[0].score}`);
 } else if (this.players[0] < this.players[1].score) {
-    console.log(`${this.players[1].name} won WAR with a score of ${this.players[1].score}`)
+    console.log(`${this.players[1].name.toUpperCase()} won WAR with a score of ${this.players[1].score}`)
 } else {
-    console.log(`${this.players[0].name} and ${this.players[1].name} tied!`);
+    console.log(`Player 1 and Player2 tied!`);
 }
 }
 }
 
 const game = new Game();
-game.createGame();
+game.start();
